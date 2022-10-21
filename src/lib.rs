@@ -11,6 +11,7 @@ use std::ffi::{CStr, CString};
 use std::fs::File;
 use std::io::Read;
 use std::os::raw::{c_char, c_float, c_int};
+use ::svg::node::element::Path;
 use base64::{encode, decode, DecodeError};
 use crate::pdf::create_pdf;
 use crate::png::{create_png, create_png_ff};
@@ -283,3 +284,32 @@ pub extern "C" fn svg_document(width: c_float,
     let res_ptr = res_c_str.into_raw();
     res_ptr
 }
+/*
+#[no_mangle]
+pub extern "C" fn md_to_b64(file: *const c_char) -> B64 {
+    let file_c_str = unsafe { CStr::from_ptr(file) };
+    let file_str = file_c_str.to_str();
+    match file_str {
+        Ok(ok) => {
+            use crowbook::Book;
+            let mut book = Book::new();
+            let _ = book.load_markdown_file(ok);
+            let mut pdf: Vec<u8> = Vec::new();
+            book.render_format_to("pdf", &mut pdf).unwrap();
+            let res = encode(pdf);
+            B64 {
+                b_64: CString::new(res).unwrap().into_raw(),
+                sw: true,
+                err: CString::new("").unwrap().into_raw()
+            }
+        },
+        Err(err) => {
+            eprintln!("{:?}", err);
+            B64 {
+                b_64: CString::new("").unwrap().into_raw(),
+                sw: false,
+                err: CString::new(err.to_string()).unwrap().into_raw()
+            }
+        }
+    }
+}*/

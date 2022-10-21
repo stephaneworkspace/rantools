@@ -133,6 +133,8 @@ pub fn create_pdf(template: &[NodeElement]) {
     let (doc, page1, layer1) = PdfDocument::new("printpdf graphics test", Mm(MAX_WIDTH), Mm(MAX_HEIGHT), "Layer 1");
     let current_layer = doc.get_page(page1).get_layer(layer1);
     let current_y = MAX_HEIGHT - MARGIN_HEIGHT;
+
+    // Draw Table
     for x in NodeElement::read_root_template_draw_rectangle(template, current_y) {
         current_layer.set_fill_color(Color::Rgb(Rgb::new(x.0.fill_color.0,
                                                          x.0.fill_color.1,
@@ -146,6 +148,10 @@ pub fn create_pdf(template: &[NodeElement]) {
         current_layer.add_shape(x.1);
     }
 
+
+
+    // Draw text
+    println!("{:?}", current_y);
     let text = "Lorem ipsum";
     let text2 = "abcdefgh";
 
